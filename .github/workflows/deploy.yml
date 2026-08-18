@@ -1,0 +1,46 @@
+name: Deploy TUBE COFFEE
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tube-coffee-system/package-lock.json
+
+      - name: Install dependencies
+        working-directory: tube-coffee-system
+        run: npm ci
+
+      - name: Build project
+        working-directory: tube-coffee-system
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tube-coffee-system/dist
+
+      - name: Deploy
+        uses: actions/deploy-pages@v4
