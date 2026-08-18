@@ -18,6 +18,61 @@ import ManageServices from "./admin/ManageServices";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
-function PublicLayout(){return <><Navbar/><Routes><Route path="/" element={<Home/>}/><Route path="/about" element={<About/>}/><Route path="/menu" element={<Menu/>}/><Route path="/services" element={<Services/>}/><Route path="/contact" element={<Contact/>}/><Route path="/cart" element={<Cart/>}/><Route path="/login" element={<Login/>}/><Route path="/register" element={<Register/>}/><Route path="/forgot-password" element={<ForgotPassword/>}/><Route element={<ProtectedRoute/>}><Route path="/checkout" element={<Checkout/>}/><Route path="/dashboard" element={<CustomerLayout/>}><Route index element={<Dashboard/>}/></Route><Route path="/orders" element={<CustomerLayout/>}><Route index element={<Orders/>}/></Route><Route path="/profile" element={<CustomerLayout/>}><Route index element={<Profile/>}/></Route></Route></Routes><Footer/></>}
+function PublicLayout() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-export default function App(){return <AuthProvider><CartProvider><BrowserRouter><Routes><Route path="/admin/*" element={<AdminRoute/>}><Route element={<AdminLayout/>}><Route index element={<AdminDashboard/>}/><Route path="products" element={<ManageProducts/>}/><Route path="orders" element={<ManageOrders/>}/><Route path="users" element={<ManageUsers/>}/><Route path="categories" element={<ManageCategories/>}/><Route path="services" element={<ManageServices/>}/></Route></Route><Route path="/*" element={<PublicLayout/>}/></Routes></BrowserRouter></CartProvider></AuthProvider>}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/dashboard" element={<CustomerLayout />}>
+            <Route index element={<Dashboard />} />
+          </Route>
+          <Route path="/orders" element={<CustomerLayout />}>
+            <Route index element={<Orders />} />
+          </Route>
+          <Route path="/profile" element={<CustomerLayout />}>
+            <Route index element={<Profile />} />
+          </Route>
+        </Route>
+      </Routes>
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        {/* ✅ This is the important line */}
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <Routes>
+            <Route path="/admin/*" element={<AdminRoute />}>
+              <Route element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<ManageProducts />} />
+                <Route path="orders" element={<ManageOrders />} />
+                <Route path="users" element={<ManageUsers />} />
+                <Route path="categories" element={<ManageCategories />} />
+                <Route path="services" element={<ManageServices />} />
+              </Route>
+            </Route>
+
+            <Route path="/*" element={<PublicLayout />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
+  );
+}
